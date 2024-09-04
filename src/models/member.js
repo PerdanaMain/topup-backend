@@ -19,7 +19,30 @@ const create = (email, hashedPassword, first_name, last_name) => {
   return dbPool.execute(query, [email, hashedPassword, first_name, last_name]);
 };
 
+const getMemberById = (id) => {
+  const query = `
+  SELECT users.first_name, users.last_name, users.email, images.url AS profile_image
+  FROM users
+  LEFT JOIN images ON users.image_id = images.id
+  WHERE users.id = ?
+  `;
+
+  return dbPool.execute(query, [id]);
+};
+
+const update = (id, first_name, last_name) => {
+  const query = `
+  UPDATE users
+  SET first_name='${first_name}',last_name='${last_name}'
+  WHERE id = '${id}'
+  `;
+
+  return dbPool.execute(query);
+};
+
 module.exports = {
   getMemberByEmail,
+  getMemberById,
   create,
+  update,
 };

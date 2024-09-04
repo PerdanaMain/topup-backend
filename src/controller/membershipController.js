@@ -57,7 +57,7 @@ const login = async (req, res, next) => {
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "12",
+        expiresIn: "12h",
       }
     );
 
@@ -71,6 +71,66 @@ const login = async (req, res, next) => {
   } catch (error) {
     return res.status(500).json({
       status: 1,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
+const index = async (req, res, next) => {
+  try {
+    const [member] = await Member.getMemberById(req.user.id);
+
+    return res.status(200).json({
+      status: 0,
+      message: "Sukses",
+      data: member,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 1,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
+const update = async (req, res, next) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty())
+      return res.status(400).json({
+        message: errors.mapped(),
+      });
+
+    const { first_name, last_name } = req.body;
+    const user = req.user;
+    const [row] = await Member.update(user.id, first_name, last_name);
+    const [member] = await Member.getMemberById(user.id);
+
+    return res.status(200).json({
+      status: 0,
+      message: "Update profile berhasil",
+      data: member,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 1,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
+const uploadImage = async (req, res, next) => {
+  try {
+    return res.status(200).json({
+      message: "Upload berhasil",
+      data: null,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 102,
       message: error.message,
       data: null,
     });
@@ -123,7 +183,16 @@ const validate = (method) => {
         body("password").notEmpty().withMessage("Password tidak boleh kosong"),
       ];
     }
-
+    case "update": {
+      return [
+        body("first_name")
+          .notEmpty()
+          .withMessage("First name tidak boleh kosong"),
+        body("last_name")
+          .notEmpty()
+          .withMessage("Last name tidak boleh kosong"),
+      ];
+    }
     default:
       break;
   }
@@ -132,5 +201,8 @@ const validate = (method) => {
 module.exports = {
   login,
   registration,
+  index,
+  update,
+  uploadImage,
   validate,
 };
