@@ -1,13 +1,15 @@
 const express = require("express");
+const {
+  login,
+  registration,
+  validate,
+} = require("../controller/membershipController");
 
 const router = express.Router();
 
 const prefix = "/api/v1";
 
-router.post(prefix + "/login", (req, res, next) => {
-  return res.status(200).json({
-    message: "route login",
-  });
-});
+router.post(prefix + "/registration", validate("registration"), registration);
+router.post(prefix + "/login", validate("login"), login);
 
 module.exports = router;

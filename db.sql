@@ -61,5 +61,5 @@ VALUES
     'Firman',
     'Perdana',
     'firman@mail.com',
-    '$2a$10$2DeHvuG4hrU3s4Ce3KsmrO0iRXXMgSwEB/D8iAE9F/kjlR0y2Sqhm'
+    '$2b$10$tWvEO6P44.S/pKisZz1OQO1MAUiAhGXtOgtYiQtuBZgBmXfi9NiCa'
   );

@@ -1,7 +1,7 @@
 require("dotenv").config();
 
 const express = require("express");
-const membershipRoutes = require("./routes/membership");
+const membershipRouter = require("./routes/membership");
 
 const port = process.env.PORT || 5000;
 
@@ -27,7 +27,7 @@ app.get(prefix + "/", (req, res, next) => {
   }
 });
 
-app.use(membershipRoutes);
+app.use(membershipRouter);
 
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
