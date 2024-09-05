@@ -10,7 +10,6 @@ const {
 
 const verifyToken = require("../middlewares/verifyToken");
 const upload = require("../middlewares/multer");
-const multer = require("multer");
 
 const router = express.Router();
 

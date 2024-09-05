@@ -1,7 +1,9 @@
 require("dotenv").config();
 
 const express = require("express");
-const membershipRouter = require("./routes/membership");
+const membershipRouter = require("./routes/memberRouter");
+const bannerRouter = require("./routes/bannerRouter");
+const serviceRouter = require("./routes/serviceRouter");
 
 const port = process.env.PORT || 5000;
 
@@ -28,6 +30,8 @@ app.get(prefix + "/", (req, res, next) => {
 });
 
 app.use(membershipRouter);
+app.use(bannerRouter);
+app.use(serviceRouter);
 
 // Error handler
 app.use((err, req, res, next) => {
