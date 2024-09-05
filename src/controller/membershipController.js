@@ -177,11 +177,16 @@ const uploadImage = async (req, res, next) => {
         "public/images",
         row[0].image_name
       );
-      fs.unlink(filePath, (err) => {
-        if (err) return next();
-
-        Image.update(row[0].image_id, file.filename);
+      fs.unlink(filePath, async (err) => {
+        if (err) {
+          return res.status(400).json({
+            status: 1,
+            message: "File tidak ditemukan",
+            data: null,
+          });
+        }
       });
+      await Image.update(row[0].image_id, file.filename);
     }
 
     const [member] = await Member.getMemberById(user.id);
