@@ -1,13 +1,13 @@
 CREATE TABLE IF NOT EXISTS `images`(
   `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `url` TEXT NOT NULL,
+  `name` TEXT NOT NULL,
   `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   `updated_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 CREATE TABLE IF NOT EXISTS `users`(
   `id` INT AUTO_INCREMENT PRIMARY KEY,
-  `image_id` INT,
+  `image_id` INT NULL,
   `first_name` VARCHAR(50) NOT NULL,
   `last_name` VARCHAR(50) NOT NULL,
   `email` VARCHAR(50) NOT NULL UNIQUE,
@@ -40,24 +40,16 @@ CREATE TABLE IF NOT EXISTS `services`(
 
 -- INSERT VALUES
 INSERT INTO
-  `images`(`url`,)
-VALUES
-  ('https://nutech-integrasi.app/dummy.jpg'),
-  ('https://nutech-integrasi.app/dummy.jpg'),
-  ('https://nutech-integrasi.app/dummy.jpg'),
-  ('https://nutech-integrasi.app/dummy.jpg');
-
-INSERT INTO
   `users`(
     `image_id`,
     `first_name`,
     `last_name`,
     `email`,
-    `password`,
+    `password`
   )
 VALUES
   (
-    1,
+    null,
     'Firman',
     'Perdana',
     'firman@mail.com',

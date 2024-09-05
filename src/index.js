@@ -29,6 +29,15 @@ app.get(prefix + "/", (req, res, next) => {
 
 app.use(membershipRouter);
 
+// Error handler
+app.use((err, req, res, next) => {
+  return res.status(500).json({
+    status: 1,
+    message: err.message,
+    data: null,
+  });
+});
+
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });

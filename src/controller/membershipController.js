@@ -1,15 +1,15 @@
-const Member = require("../models/member");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const fs = require("fs");
 const { body, validationResult } = require("express-validator");
+const Member = require("../models/member");
+const Image = require("../models/image");
+const path = require("path");
 
 const registration = async (req, res, next) => {
   try {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(400).json({
-        message: errors.mapped(),
-      });
+    if (!errors.isEmpty()) return validationResponse(errors.mapped(), res);
 
     const { email, password, first_name, last_name } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -29,13 +29,37 @@ const registration = async (req, res, next) => {
   }
 };
 
+const validationResponse = (err, res) => {
+  if (err.email)
+    return res.status(400).json({
+      status: 1,
+      message: err.email.msg,
+      data: null,
+    });
+  if (err.password)
+    return res.status(400).json({
+      status: 1,
+      message: err.password.msg,
+      data: null,
+    });
+  if (err.first_name)
+    return res.status(400).json({
+      status: 1,
+      message: err.first_name.msg,
+      data: null,
+    });
+  if (err.last_name)
+    return res.status(400).json({
+      status: 1,
+      message: err.last_name.msg,
+      data: null,
+    });
+};
+
 const login = async (req, res, next) => {
   try {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(400).json({
-        message: errors.mapped(),
-      });
+    if (!errors.isEmpty()) return validationResponse(errors.mapped(), res);
 
     const { email, password } = req.body;
     const [member] = await Member.getMemberByEmail(email);
@@ -77,6 +101,20 @@ const login = async (req, res, next) => {
   }
 };
 
+const resourceData = (member, req) => {
+  const hName = req.protocol + "://" + req.headers.host;
+  const profile_image = hName + "/assets/" + member.image_name;
+
+  const data = {
+    ...member,
+    profile_image: member.image_name == null ? null : profile_image,
+  };
+
+  delete data.image_name;
+  delete data.image_id;
+  return data;
+};
+
 const index = async (req, res, next) => {
   try {
     const [member] = await Member.getMemberById(req.user.id);
@@ -84,7 +122,7 @@ const index = async (req, res, next) => {
     return res.status(200).json({
       status: 0,
       message: "Sukses",
-      data: member,
+      data: resourceData(member[0], req),
     });
   } catch (error) {
     return res.status(500).json({
@@ -98,20 +136,17 @@ const index = async (req, res, next) => {
 const update = async (req, res, next) => {
   try {
     const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(400).json({
-        message: errors.mapped(),
-      });
+    if (!errors.isEmpty()) return validationResponse(errors.mapped(), res);
 
     const { first_name, last_name } = req.body;
     const user = req.user;
-    const [row] = await Member.update(user.id, first_name, last_name);
+    await Member.update(user.id, first_name, last_name, null);
     const [member] = await Member.getMemberById(user.id);
 
     return res.status(200).json({
       status: 0,
       message: "Update profile berhasil",
-      data: member,
+      data: resourceData(member[0], req),
     });
   } catch (error) {
     return res.status(500).json({
@@ -124,9 +159,36 @@ const update = async (req, res, next) => {
 
 const uploadImage = async (req, res, next) => {
   try {
+    const file = req.file;
+    const user = req.user;
+    const [row] = await Member.getMemberById(user.id);
+
+    if (row[0].image_name == null) {
+      const [image] = await Image.create(file.filename);
+      await Member.update(
+        user.id,
+        user.first_name,
+        user.last_name,
+        image.insertId
+      );
+    } else {
+      const filePath = path.join(
+        path.resolve(__dirname, "../../"),
+        "public/images",
+        row[0].image_name
+      );
+      fs.unlink(filePath, (err) => {
+        if (err) return next();
+
+        Image.update(row[0].image_id, file.filename);
+      });
+    }
+
+    const [member] = await Member.getMemberById(user.id);
+
     return res.status(200).json({
       message: "Upload berhasil",
-      data: null,
+      data: resourceData(member[0], req),
     });
   } catch (error) {
     return res.status(500).json({

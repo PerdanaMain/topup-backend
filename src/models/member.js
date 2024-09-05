@@ -21,7 +21,7 @@ const create = (email, hashedPassword, first_name, last_name) => {
 
 const getMemberById = (id) => {
   const query = `
-  SELECT users.first_name, users.last_name, users.email, images.url AS profile_image
+  SELECT users.first_name, users.last_name, users.email, users.image_id, images.name AS image_name
   FROM users
   LEFT JOIN images ON users.image_id = images.id
   WHERE users.id = ?
@@ -30,14 +30,14 @@ const getMemberById = (id) => {
   return dbPool.execute(query, [id]);
 };
 
-const update = (id, first_name, last_name) => {
+const update = (id, first_name, last_name, image_id) => {
   const query = `
   UPDATE users
-  SET first_name='${first_name}',last_name='${last_name}'
-  WHERE id = '${id}'
+  SET first_name=?,last_name=?, image_id=COALESCE(?,image_id)
+  WHERE id = ?
   `;
 
-  return dbPool.execute(query);
+  return dbPool.execute(query, [first_name, last_name, image_id, id]);
 };
 
 module.exports = {
