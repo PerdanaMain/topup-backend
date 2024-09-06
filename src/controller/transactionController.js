@@ -1,4 +1,4 @@
-const { body, validationResult } = require("express-validator");
+const { body, validationResult, param, query } = require("express-validator");
 const Member = require("../models/member");
 const Transaction = require("../models/transaction");
 const Service = require("../models/service");
@@ -94,11 +94,26 @@ const transaction = async (req, res, next) => {
   }
 };
 const history = async (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) return validationResponse(errors.mapped(), res);
+
+  const offset = parseInt(req.query.offset);
+  const limit = parseInt(req.query.limit);
+  const [transactions] = await Transaction.getTransactionByUserId(
+    offset,
+    limit,
+    req.user.id
+  );
+
   try {
     return res.status(200).json({
       status: 0,
       message: "Get history berhasil",
-      data: null,
+      data: {
+        offset,
+        limit,
+        record: transactions,
+      },
     });
   } catch (error) {
     return res.status(500).json({
@@ -120,6 +135,18 @@ const validationResponse = (err, res) => {
     return res.status(400).json({
       status: 1,
       message: err.service_code.msg,
+      data: null,
+    });
+  if (err.offset)
+    return res.status(400).json({
+      status: 1,
+      message: err.offset.msg,
+      data: null,
+    });
+  if (err.limit)
+    return res.status(400).json({
+      status: 1,
+      message: err.limit.msg,
       data: null,
     });
 };
@@ -154,6 +181,18 @@ const validate = (method) => {
 
             return true;
           }),
+      ];
+    }
+    case "history": {
+      return [
+        query("offset")
+          .optional()
+          .isNumeric()
+          .withMessage("Parameter offset harus berupa angka"),
+        query("limit")
+          .optional()
+          .isNumeric()
+          .withMessage("Parameter limit harus berupa angka"),
       ];
     }
     default:

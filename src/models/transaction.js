@@ -36,8 +36,26 @@ const getTransactionById = (id) => {
   return dbPool.execute(query, [id]);
 };
 
+const getTransactionByUserId = (offset = 0, limit = 0, user_id) => {
+  // Set nilai default untuk limit dan offset
+  limit = limit === 0 || limit === undefined ? 10 : limit; // Default limit to 10 if 0 or undefined
+  offset = offset === 0 || offset === undefined ? 0 : offset;
+
+  const query = `
+  SELECT transactions.invoice_number, services.service_code, services.service_name, 
+         transactions.transaction_type, transactions.total_amount, transactions.created_at AS created_on
+  FROM transactions
+  LEFT JOIN services ON transactions.transaction_type = services.service_code
+  WHERE transactions.user_id = ?
+  LIMIT ? OFFSET ?
+  `;
+
+  return dbPool.execute(query, [user_id, limit, offset]);
+};
+
 module.exports = {
   create,
   countTodayTransaction,
   getTransactionById,
+  getTransactionByUserId,
 };
