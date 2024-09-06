@@ -30,6 +30,15 @@ const getMemberById = (id) => {
   return dbPool.execute(query, [id]);
 };
 
+const getBalanceMember = (id) => {
+  const query = `
+  SELECT users.balance
+  FROM users
+  WHERE users.id = ?`;
+
+  return dbPool.execute(query, [id]);
+};
+
 const update = (id, first_name, last_name, image_id) => {
   const query = `
   UPDATE users
@@ -40,9 +49,32 @@ const update = (id, first_name, last_name, image_id) => {
   return dbPool.execute(query, [first_name, last_name, image_id, id]);
 };
 
+const incrementBalance = (balance, id) => {
+  const query = `
+  UPDATE users
+  SET balance = balance + ?
+  WHERE id = ?
+  `;
+
+  return dbPool.execute(query, [balance, id]);
+};
+
+const decrementBalance = (balance, id) => {
+  const query = `
+  UPDATE users
+  SET balance = balance - ?
+  WHERE id = ?
+  `;
+
+  return dbPool.execute(query, [balance, id]);
+};
+
 module.exports = {
   getMemberByEmail,
   getMemberById,
+  getBalanceMember,
   create,
   update,
+  incrementBalance,
+  decrementBalance,
 };

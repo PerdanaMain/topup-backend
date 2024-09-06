@@ -192,8 +192,28 @@ const uploadImage = async (req, res, next) => {
     const [member] = await Member.getMemberById(user.id);
 
     return res.status(200).json({
+      status: 0,
       message: "Upload berhasil",
       data: resourceData(member[0], req),
+    });
+  } catch (error) {
+    return res.status(500).json({
+      status: 102,
+      message: error.message,
+      data: null,
+    });
+  }
+};
+
+const getBalance = async (req, res, next) => {
+  try {
+    const user = req.user;
+    const [balance] = await Member.getBalanceMember(user.id);
+
+    return res.status(200).json({
+      status: 0,
+      message: "Get balance berhasil",
+      data: balance[0],
     });
   } catch (error) {
     return res.status(500).json({
@@ -271,5 +291,6 @@ module.exports = {
   index,
   update,
   uploadImage,
+  getBalance,
   validate,
 };

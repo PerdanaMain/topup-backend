@@ -4,6 +4,7 @@ const express = require("express");
 const membershipRouter = require("./routes/memberRouter");
 const bannerRouter = require("./routes/bannerRouter");
 const serviceRouter = require("./routes/serviceRouter");
+const transactionRouter = require("./routes/transactionRouter");
 
 const port = process.env.PORT || 5000;
 
@@ -32,6 +33,7 @@ app.get(prefix + "/", (req, res, next) => {
 app.use(membershipRouter);
 app.use(bannerRouter);
 app.use(serviceRouter);
+app.use(transactionRouter);
 
 // Error handler
 app.use((err, req, res, next) => {
