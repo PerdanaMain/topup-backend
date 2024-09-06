@@ -1,0 +1,432 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0",
+    "title": "MockUp API Top Up",
+    "description": "Documentation for Take Home Test API",
+    "contact": {}
+  },
+  "host": "localhost:5000",
+  "basePath": "/api",
+  "securityDefinitions": {},
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/v1/login": {
+      "post": {
+        "description": "\n\n**API Registration Public (Tidak perlu Token untuk mengaksesnya)**\n\nDigunakan untuk melakukan registrasi User agar bisa Login kedalam aplikasi\n\n_Ketentuan :_\n\n1. Parameter request **email** harus terdapat validasi format email\n    \n2. Parameter request **password** Length minimal 8 karakter\n    \n3. Handling Response sesuai dokumentasi Response dibawah\n    \n\n",
+        "summary": "Login",
+        "tags": ["Memberships"],
+        "operationId": "Login",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "default": "Bearer {token}",
+            "type": "string"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/LoginRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/v1/profile": {
+      "get": {
+        "description": "\n\n**API Profile Private (memerlukan Token untuk mengaksesnya)**\n\nDigunakan untuk mendapatkan informasi profile User\n\n_Ketentuan :_\n\n1. Service ini harus menggunakan **Bearer** **Token** **JWT** untuk mengaksesnya\n    \n2. Tidak ada parameter email di query param url ataupun request body, parameter email diambil dari payload JWT yang didapatkan dari hasil login\n    \n3. Handling Response sesuai dokumentasi Response dibawah\n    \n\n",
+        "summary": "Profile",
+        "tags": ["Memberships"],
+        "operationId": "Profile",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/v1/profile/update": {
+      "put": {
+        "description": "\n\n**API Update Profile Private (memerlukan Token untuk mengaksesnya)**\n\nDigunakan untuk mengupdate data profile User\n\n_Ketentuan :_\n\n1. Service ini harus menggunakan **Bearer** **Token** **JWT** untuk mengaksesnya\n    \n2. Tidak ada parameter email di query param url ataupun request body, parameter email diambil dari payload JWT yang didapatkan dari hasil login\n    \n3. Handling Response sesuai dokumentasi Response dibawah\n    \n\n",
+        "summary": "Update profile",
+        "tags": ["Memberships"],
+        "operationId": "Updateprofile",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UpdateprofileRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/v1/profile/image": {
+      "put": {
+        "description": "\n\n**API Upload Profile Image Private (memerlukan Token untuk mengaksesnya)**\n\nDigunakan untuk mengupdate / upload profile image User\n\n_Ketentuan :_\n\n1. Service ini harus menggunakan **Bearer** **Token** **JWT** untuk mengaksesnya\n    \n2. Tidak ada parameter email di query param url ataupun request body, parameter email diambil dari payload JWT yang didapatkan dari hasil login\n    \n3. Format Image yang boleh di upload hanya **jpeg** dan **png**\n    \n4. Handling Response sesuai dokumentasi Response dibawah\n    \n\n",
+        "summary": "Update profile image",
+        "tags": ["Memberships"],
+        "operationId": "Updateprofileimage",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "consumes": ["multipart/form-data"],
+        "parameters": [
+          {
+            "name": "file",
+            "in": "formData",
+            "required": true,
+            "type": "file",
+            "format": "file",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/v1/registration": {
+      "post": {
+        "description": "\n\n**API Registration Public (Tidak perlu Token untuk mengaksesnya)**\n\nDigunakan untuk melakukan registrasi User agar bisa Login kedalam aplikasi\n\n_Ketentuan :_\n\n1. Parameter request **email** harus terdapat validasi format email\n    \n2. Parameter request **password** Length minimal 8 karakter\n    \n3. Handling Response sesuai dokumentasi Response dibawah\n    \n\n",
+        "summary": "Registration",
+        "tags": ["Memberships"],
+        "operationId": "Registration",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "default": "Bearer {token}",
+            "type": "string"
+          },
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/RegistrationRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    },
+    "/v1/banner": {
+      "get": {
+        "description": "\n\n**API Banner Public (tidak memerlukan Token untuk mengaksesnya)**\n\nDigunakan untuk mendapatkan list banner\n\n_Ketentuan :_\n\n1. Buat data list banner sesuai dokumentasi Response dibawah, usahakan banner ini tidak di hardcode, melainkan ambil dari database\n    \n2. Tidak perlu membuatkan module CRUD banner\n    \n3. Handling Response sesuai dokumentasi Response dibawah\n    \n\n",
+        "summary": "Banner",
+        "tags": ["Informations"],
+        "operationId": "Banner",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/v1/services": {
+      "get": {
+        "description": "\n\n**API Services Private (memerlukan Token untuk mengaksesnya)**\n\nDigunakan untuk mendapatkan list Service/Layanan PPOB\n\n_Ketentuan :_\n\n1. Buat data list Service/Layanan sesuai dokumentasi Response dibawah, usahakan data list **Service** atau **Layanan** ini tidak di hardcode, melainkan ambil dari database\n    \n2. Tidak perlu membuatkan module CRUD Service/Layanan\n    \n3. Handling Response sesuai dokumentasi Response dibawah\n    \n\n",
+        "summary": "Services",
+        "tags": ["Informations"],
+        "operationId": "Services",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/v1/balance": {
+      "get": {
+        "description": "\n\n**API Balance Private (memerlukan Token untuk mengaksesnya)**\n\nDigunakan untuk mendapatkan informasi balance / saldo terakhir dari User\n\n_Ketentuan :_\n\n1. Service ini harus menggunakan **Bearer** **Token** **JWT** untuk mengaksesnya\n    \n2. Tidak ada parameter email di query param url ataupun request body, parameter email diambil dari payload JWT yang didapatkan dari hasil login\n    \n3. Handling Response sesuai dokumentasi Response dibawah\n    \n\n",
+        "summary": "Balance",
+        "tags": ["Transactions"],
+        "operationId": "Balance",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/v1/topup": {
+      "post": {
+        "description": "\n\n**API Topup Private (memerlukan Token untuk mengaksesnya)**\n\nDigunakan untuk melakukan top up balance / saldo dari User\n\n_Ketentuan :_\n\n1. Service ini harus menggunakan **Bearer** **Token** **JWT** untuk mengaksesnya\n    \n2. Tidak ada parameter email di query param url ataupun request body, parameter email diambil dari payload JWT yang didapatkan dari hasil login\n    \n3. Setiap kali melakukan Top Up maka balance / saldo dari User otomatis bertambah\n    \n4. Parameter **amount** hanya boleh angka saja dan tidak boleh lebih kecil dari 0\n    \n5. Pada saat Top Up set transaction_type di database menjadi **TOPUP**\n    \n6. Handling Response sesuai dokumentasi Response dibawah\n    \n\n",
+        "summary": "Topup",
+        "tags": ["Transactions"],
+        "operationId": "Topup",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TopupRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/v1/transaction": {
+      "post": {
+        "description": "\n\n**API Transaction Private (memerlukan Token untuk mengaksesnya)**\n\nDigunakan untuk melakukan transaksi dari services / layanan yang tersedia\n\n_Ketentuan :_\n\n1. Service ini harus menggunakan **Bearer** **Token** **JWT** untuk mengaksesnya\n    \n2. Tidak ada parameter email di query param url ataupun request body, parameter email diambil dari payload JWT yang didapatkan dari hasil login\n    \n3. Setiap kali melakukan Transaksi harus dipastikan balance / saldo mencukupi\n    \n4. Pada saat Transaction set transaction_type di database menjadi **PAYMENT**\n    \n5. Handling Response sesuai dokumentasi Response dibawah\n    \n6. Response **invoice_number** untuk formatnya generate bebas\n    \n\n",
+        "summary": "Transaction",
+        "tags": ["Transactions"],
+        "operationId": "Transaction",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Body",
+            "in": "body",
+            "required": true,
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/TransactionRequest"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/v1/transaction/history": {
+      "get": {
+        "description": "\n\n**API History Private (memerlukan Token untuk mengaksesnya)**\n\nDigunakan untuk mendapatkan informasi history transaksi\n\n_Ketentuan :_\n\n1. Service ini harus menggunakan **Bearer** **Token** **JWT** untuk mengaksesnya\n    \n2. Tidak ada parameter email di query param url ataupun request body, parameter email diambil dari payload JWT yang didapatkan dari hasil login\n    \n3. Terdapat parameter **limit** yang bersifat **opsional**, jika limit tidak dikirim maka tampilkan semua data\n    \n4. Data di order dari yang paling baru berdasarkan transaction date (created_on)\n    \n5. Handling Response sesuai dokumentasi Response dibawah\n    \n\n",
+        "summary": "History transaction",
+        "tags": ["Transactions"],
+        "operationId": "Historytransaction",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "offset",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "required": true,
+            "type": "integer",
+            "format": "int32",
+            "description": ""
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        },
+        "security": []
+      }
+    },
+    "/v1": {
+      "get": {
+        "summary": "root",
+        "tags": ["Misc"],
+        "operationId": "root",
+        "deprecated": false,
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": false,
+            "default": "Bearer {token}",
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "headers": {}
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "LoginRequest": {
+      "title": "LoginRequest",
+      "example": {
+        "email": "boto@mail.com",
+        "password": "qwerty12345"
+      },
+      "type": "object",
+      "properties": {
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": ["email", "password"]
+    },
+    "UpdateprofileRequest": {
+      "title": "UpdateprofileRequest",
+      "example": {
+        "first_name": "user upd",
+        "last_name": "test upd"
+      },
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        }
+      },
+      "required": ["first_name", "last_name"]
+    },
+    "RegistrationRequest": {
+      "title": "RegistrationRequest",
+      "example": {
+        "first_name": "user",
+        "last_name": "test",
+        "email": "boto@mail.com",
+        "password": "qwerty12345"
+      },
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "type": "string"
+        },
+        "last_name": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "password": {
+          "type": "string"
+        }
+      },
+      "required": ["first_name", "last_name", "email", "password"]
+    },
+    "TopupRequest": {
+      "title": "TopupRequest",
+      "example": {
+        "top_up_amount": 90000000
+      },
+      "type": "object",
+      "properties": {
+        "top_up_amount": {
+          "type": "integer",
+          "format": "int32"
+        }
+      },
+      "required": ["top_up_amount"]
+    },
+    "TransactionRequest": {
+      "title": "TransactionRequest",
+      "example": {
+        "service_code": "PULSA"
+      },
+      "type": "object",
+      "properties": {
+        "service_code": {
+          "type": "string"
+        }
+      },
+      "required": ["service_code"]
+    }
+  },
+  "security": [],
+  "tags": [
+    {
+      "name": "Memberships"
+    },
+    {
+      "name": "Informations"
+    },
+    {
+      "name": "Transactions"
+    },
+    {
+      "name": "Misc",
+      "description": ""
+    }
+  ]
+}

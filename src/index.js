@@ -5,6 +5,10 @@ const membershipRouter = require("./routes/memberRouter");
 const bannerRouter = require("./routes/bannerRouter");
 const serviceRouter = require("./routes/serviceRouter");
 const transactionRouter = require("./routes/transactionRouter");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("../api-docs.json");
+const fs = require("fs");
+const path = require("path");
 
 const port = process.env.PORT || 5000;
 
@@ -34,6 +38,13 @@ app.use(membershipRouter);
 app.use(bannerRouter);
 app.use(serviceRouter);
 app.use(transactionRouter);
+
+// Swagger setup
+app.use(
+  prefix + "/api-docs",
+  swaggerUi.serve,
+  swaggerUi.setup(swaggerDocument)
+);
 
 // Error handler
 app.use((err, req, res, next) => {
